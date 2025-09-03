@@ -1,6 +1,8 @@
 # AgentScope 学習用サンプルプロジェクト
 
 このプロジェクトは、`AgentScope`フレームワークの主要な概念を、ステップバイステップで学ぶために作成されたサンプル集です。
+https://github.com/agentscope-ai/agentscope
+
 
 それぞれの`sample*.py`ファイルが、特定の機能に焦点を当てた自己完結型のプログラムになっています。
 
