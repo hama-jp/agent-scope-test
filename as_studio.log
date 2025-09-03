@@ -1,0 +1,9 @@
+Database initialized with options: {
+  "type": "sqlite",
+  "database": "/home/jules/AgentScope-Studio/database.sqlite",
+  "synchronize": true,
+  "logging": false
+}
+Refresh the database ...
+Done
+Server running on port 3000 in production mode ...
