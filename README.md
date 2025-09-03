@@ -14,17 +14,32 @@ https://github.com/agentscope-ai/agentscope
 
 Python 3.9以上がインストールされていることを確認してください。
 
-### b. 必要なPythonパッケージのインストール
+### b. Python仮想環境の構築とパッケージインストール (uv版)
 
-ターミナルで以下のコマンドを実行し、`AgentScope`と、サンプルで使用する関連ライブラリをインストールします。
+このプロジェクトでは、高速なパッケージインストーラである`uv`の使用を推奨します。
 
-```bash
-pip install agentscope packaging ollama
-```
+1.  **uvのインストール**:
+    お使いの環境に`uv`がインストールされていない場合は、公式の指示に従いインストールしてください。
+    ```bash
+    # macOS / Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
 
-* `agentscope`: フレームワーク本体です。
-* `packaging`: `agentscope`が内部で利用する依存ライブラリです。
-* `ollama`: ローカルLLMであるOllamaと連携するために必要です。
+2.  **仮想環境の作成と有効化**:
+    プロジェクトのルートで以下のコマンドを実行し、仮想環境を作成して有効化します。
+    ```bash
+    uv venv
+    source .venv/bin/activate
+    ```
+
+3.  **必要なPythonパッケージのインストール**:
+    `uv`を使って、`AgentScope`と関連ライブラリをインストールします。
+    ```bash
+    uv pip install agentscope packaging "ollama>=0.1.7"
+    ```
+    * `agentscope`: フレームワーク本体です。
+    * `packaging`: `agentscope`が内部で利用する依存ライブラリです。
+    * `ollama`: ローカルLLMであるOllamaと連携するために必要です。(`LEARNINGS.md`に基づき、バージョンを指定)
 
 ### c. Ollamaのセットアップ
 
@@ -32,26 +47,31 @@ pip install agentscope packaging ollama
 
 1.  **Ollamaのインストール**: 公式サイト([https://ollama.com/](https://ollama.com/))の指示に従い、Ollamaをインストールして起動してください。
 
-2.  **モデルのダウンロード**: サンプルでは、比較的小さく動作させやすい`gemma:2b`モデルを使用します。以下のコマンドでモデルをダウンロードしてください。
+2.  **モデルのダウンロード**: サンプルでは、`gpt-oss:20b`モデルを使用します。以下のコマンドでモデルをダウンロードしてください。
+    *注意: このモデルはリソースを多く消費する可能性があります。もし動作が重い場合は、`sample*.py`内のモデル名を、より軽量なモデル（例: `gemma:2b`, `llama3`）に書き換えて試してください。*
 
     ```bash
-    ollama pull gemma:2b
+    ollama pull gpt-oss:20b
     ```
 
-    もちろん、`sample*.py`ファイル内のモデル名を書き換えれば、他のモデル（例: `llama3`, `mistral`など）を利用することも可能です。
-
-### d. (任意) AgentScope Studioの起動
+### d. (任意) AgentScope Studioのインストールと起動
 
 `AgentScope`には、エージェントの対話の様子を視覚的に確認できるWebダッシュボード「AgentScope Studio」が付属しています。
 
-利用したい場合は、サンプル実行とは**別のターミナル**で以下のコマンドを実行してください。
+1.  **AgentScope Studioのインストール**:
+    `npm` (Node.jsのパッケージマネージャ) を使ってインストールします。
+    ```bash
+    npm install -g @agentscope/studio
+    ```
+    *もし`npm`がインストールされていない場合は、[Node.js公式サイト](https://nodejs.org/)からインストールしてください。*
 
-```bash
-as_studio
-```
-
-実行後、ブラウザで `http://localhost:3000` を開くとダッシュボードが表示されます。
-（`sample2_with_llm.py`の`studio_url`のコメントアウトを解除すると連携できます。）
+2.  **AgentScope Studioの起動**:
+    利用したい場合は、サンプル実行とは**別のターミナル**で以下のコマンドを実行してください。
+    ```bash
+    as_studio
+    ```
+    実行後、ブラウザで `http://localhost:3000` を開くとダッシュボードが表示されます。
+    （`sample2_with_llm.py`の`studio_url`のコメントアウトを解除すると連携できます。）
 
 ---
 
@@ -93,3 +113,21 @@ as_studio
 *   **Tool / Toolkit**: エージェントが利用できる外部機能。Python関数を`Toolkit`に登録することで、LLMが自律的に呼び出せるようになります。
 *   **非同期処理**: エージェントの呼び出しは `await agent(...)` のように、Pythonの`asyncio`に基づいた非同期処理が基本となります。
 *   **Orchestration (連携フロー)**: `async def`関数内でエージェントの呼び出し順序を制御することで、単純な応答だけでなく、複数のエージェントが協調する複雑なタスクフローを構築できます。
+
+---
+
+## 4. 次のステップ
+
+このサンプルプロジェクトで基本を学んだら、ぜひ以下のステップに挑戦して、`AgentScope`の理解をさらに深めてみてください。
+
+*   **プロンプトのカスタマイズ**:
+    - `sample2_with_llm.py` や `sample4_multi_agent.py` の `sys_prompt` を変更して、エージェントの性格や役割を自由に変えてみましょう。（例：「関西弁を話すアシスタント」「厳しい批評家」など）
+
+*   **新しいツールの追加**:
+    - `sample3_with_tool.py` を参考に、あなた自身のPython関数をツールとしてエージェントに提供してみましょう。Web APIを叩く、ファイル操作をするなど、可能性は無限大です。
+
+*   **エージェントの組み合わせ変更**:
+    - `sample4_multi_agent.py` の構成を変えて、3体以上のエージェントが連携する、より複雑なワークフローを構築してみましょう。
+
+*   **他のモデルを試す**:
+    - `Ollama`で `llama3` や `mistral` といった他のLLMをダウンロードし、`model_name` を書き換えて応答の違いを比較してみましょう。

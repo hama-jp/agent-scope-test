@@ -14,10 +14,8 @@ AgentScope学習用サンプル2：LLMとの連携
 【事前準備】
 1. Ollamaがローカルマシンにインストールされ、実行中であること。
 2. 対話に使用するモデルがOllamaにダウンロードされていること。
-   (例: `ollama pull gemma:2b`)
-   このスクリプトでは 'gemma:2b' をデフォルトとします。
-   `main.py`で使われていた 'gpt-oss:20b' は非常に大きいため、
-   より一般的なモデルに変更しました。
+   (例: `ollama pull gpt-oss:20b`)
+   このスクリプトでは 'gpt-oss:20b' をデフォルトとします。
 3. AgentScope Studioを起動しておくこと。（任意）
    ターミナルで `as_studio` コマンドを実行すると、
    `http://localhost:3000` でダッシュボードが起動します。
@@ -47,10 +45,10 @@ async def main():
     # `formatter` は、モデルとの対話形式を整えるためのものです。
     # Ollamaを使う場合、`OllamaChatFormatter` を指定するのが一般的です。
     print("Ollamaモデルを設定しています...")
-    # 'gemma:2b' は多くの環境で動作しやすい比較的小さなモデルです。
-    # 必要に応じて 'gpt-oss:20b' など、他のモデル名に変更してください。
+    # 'gpt-oss:20b' を使用します。
+    # もし動作が重い場合は、'gemma:2b' など、より軽量なモデルに変更してください。
     llm_model = OllamaChatModel(
-        model_name="gemma:2b",
+        model_name="gpt-oss:20b",
     )
     print(f"モデル '{llm_model.model_name}' の設定が完了しました。")
 
